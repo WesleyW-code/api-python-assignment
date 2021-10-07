@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from . import models, schemas
+from app.api import models, schemas
 
 def get_patient(db: Session, patient_id: int):
     return db.query(models.Patient).filter(models.Patient.id == patient_id).first()
@@ -7,20 +7,25 @@ def get_patient(db: Session, patient_id: int):
 def get_patient_by_name(db: Session, name: str):
     return db.query(models.Patient).filter(models.Patient.name == name).first()
 
-# def get_patient_by_id(db: Session, patient_id: id):
+def get_patient_by_id(db: Session, patient_id: int):
+    return db.query(models.Patient).filter(models.Patient.id == patient_id).first()
+    
+def get_patients(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Patient).offset(skip).limit(limit).all()
     
 
-# def get_patients(db: Session, skip: int = 0, limit: int = 100):
-    
+def create_patient(db: Session, patient: schemas.PatientCreate):
+    db_patient = models.Patient(name=patient.name)
+    db.add(db_patient)
+    db.commit()
+    db.refresh(db_patient)
+    return db_patient
 
-# def create_patient(db: Session, patient: schemas.PatientCreate):
-#     db_patient = models.Patient(name=patient.name)
-#     db.add(db_patient)
-#     db.commit()
-#     db.refresh(db_patient)
-#     return db_patient
-
-# def delete_patient(db: Session, patient_id: int):
+def delete_patient(db: Session, patient_id: int):
+    db.query(models.Patient).filter(models.Patient.id == patient_id).delete()
+    db.commit()
+    db.refresh()
+    return {"message": "Patient deleted"}
 
 
 # def get_appointments(db: Session, skip: int = 0, limit: int = 100):

@@ -5,8 +5,11 @@ from app.api import crud, models, schemas
 from app.database import SessionLocal, engine
 from redis import Redis
 
+
+from app.api import test
+
 # Uncomment the line below to let the ORM generate tables and relationships for us - if not using migrations
-# models.Base.metadata.create_all(bind=engine)
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -29,6 +32,11 @@ def get_db(request: Request):
 async def root():
     return {"message": "I am healthy"}
 
+# health checker
+@app.get("/test")
+async def root():
+    return test.testfunction()
+
 # Basic crud operations
 # @app.post("/appointment/", response_model=schemas.Brewer)
 
@@ -39,3 +47,10 @@ async def root():
 # @app.delete("/appointment/{id}", status_code=200)
 
 # @app.put("/appointment/{id}", response_model=schemas.Brewer)
+
+@app.post("/patients/", response_model=schemas.Patient)
+def create_user(patient: schemas.PatientCreate, db: Session = Depends(get_db)):
+    db_user = crud.get_patient_by_name(db, name=patient.name)
+    if db_user:
+        raise HTTPException(status_code=400, detail="Patient already exists")
+    return crud.create_patient(db=db, patient=patient)
