@@ -1,8 +1,14 @@
-import os
-from sqlalchemy import (create_engine, MetaData)
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+import datetime
 
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
+date_input = "2021/08/12"
+year = 2021
+month = 8
+day = 12
+time = "10:00"
+str_time = date_input+" "+time
 
-print(SQLALCHEMY_DATABASE_URL)
+time_conv = datetime.datetime.strptime(str_time,'%Y/%m/%d %H:%M')
+
+#date = datetime.datetime(year,month,day,time_conv)
+
+print (time_conv)
