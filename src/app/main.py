@@ -32,11 +32,6 @@ def get_db(request: Request):
 async def root():
     return {"message": "I am healthy"}
 
-# health checker
-@app.get("/test")
-async def root():
-    return test.testfunction()
-
 # Basic crud operations
 # @app.post("/appointment/", response_model=schemas.Brewer)
 
@@ -48,9 +43,23 @@ async def root():
 
 # @app.put("/appointment/{id}", response_model=schemas.Brewer)
 
-@app.post("/patients/", response_model=schemas.Patient)
-def create_user(patient: schemas.PatientCreate, db: Session = Depends(get_db)):
+# To create a new patient into the SQL Database. (Can be tested on the http://localhost:8080/docs - this is where i do all my testing to see if it works.)
+@app.post("/patient/", response_model=schemas.Patient)
+def create_patients(patient: schemas.PatientCreate,contact_number, db: Session = Depends(get_db)):
     db_user = crud.get_patient_by_name(db, name=patient.name)
     if db_user:
         raise HTTPException(status_code=400, detail="Patient already exists")
-    return crud.create_patient(db=db, patient=patient)
+    return crud.create_patient(db=db, patient=patient, contact_num=contact_number)
+
+# To show all the patients information.
+@app.get("/patients/", response_model=List[schemas.Patient])
+def read_patients(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    users = crud.get_patients(db, skip=skip, limit=limit)
+    return users
+
+# To create an appointment.
+@app.post("/appointment/", response_model=schemas.Appointment)
+def create_appt(
+    patient_id: int, appt: schemas.AppointmentCreate, db: Session = Depends(get_db)):
+    return crud.create_patient_appointment(db=db, appointment=appt, patient_id=patient_id)
+

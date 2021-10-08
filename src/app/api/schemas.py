@@ -29,6 +29,7 @@ class PatientCreate(PatientBase):
 class Patient(PatientBase):
     id: int
     appointments: Optional[List[Appointment]] = []
+    contact_number: str
 
     class Config:
         orm_mode = True
