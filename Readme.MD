@@ -65,7 +65,8 @@ This will generate a new migration file inside the `patient/version`, edit this 
 For the changes to take effect, run:
 
 ```bash
-cd .. && docker-compose down && docker-compose up -d --build
+Shutdown and startup:
+cd .. && docker-compose down && docker-compose up -d --build 
 ```
 
 ## To-do:

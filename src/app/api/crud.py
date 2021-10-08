@@ -45,12 +45,39 @@ def get_appointments(db: Session, skip: int = 0, limit: int = 100):
 
 def create_patient_appointment(db: Session, appointment: schemas.AppointmentCreate, patient_id: int):
     str_date = appointment.yyyy_mm_dd +" "+appointment.time
-    appt_time_constructor = datetime.datetime.strptime(str_date,'%Y/%m/%d %H:%M')
-    db_appt = models.Appointment(patient_id = patient_id, appt_length =appointment.appt_length, appt_time = appt_time_constructor)
-    db.add(db_appt)
-    db.commit()
-    db.refresh(db_appt)
-    return db_appt
+    time_input = datetime.datetime.strptime(str_date,'%Y/%m/%d %H:%M')
+
+    # Checking if any times overlap and giving error if so.
+    check = True
+    all_appointments = get_appointments(db)
+    for appt in all_appointments:
+        to_check = appt.appt_time
+        time_conv = datetime.datetime.strptime(to_check,'%Y-%m-%d %H:%M:%S')
+        difference = time_input - time_conv
+        difference = difference.total_seconds()
+        mins = difference/60
+        
+        # This checks that new appointment doesnt start at the same time as a current appointment.
+        if mins ==0:
+            check=False
+
+        # This checks that new appointment doesn't start during a current appointment
+        elif mins < appt.appt_length and mins > 0:
+            check=False
+
+        # This checks that new appointment doesn't end during a current appointment 
+        elif mins > -appointment.appt_length and mins < 0:
+            check=False
+
+    if check == False:
+        return None
+
+    else:
+        db_appt = models.Appointment(patient_id = patient_id, appt_length =appointment.appt_length, appt_time = time_input)
+        db.add(db_appt)
+        db.commit()
+        db.refresh(db_appt)
+        return db_appt
 
 
 def get_appointment_by_id(db: Session, patient_id: int):

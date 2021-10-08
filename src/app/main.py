@@ -67,9 +67,12 @@ def read_patient(patient_id: int, db: Session = Depends(get_db)):
 
 # To create an appointment for a patient.
 @app.post("/appointment/", response_model=schemas.Appointment)
-def create_appt(
-    patient_id: int, appt: schemas.AppointmentCreate, db: Session = Depends(get_db)):
-    return crud.create_patient_appointment(db=db, appointment=appt, patient_id=patient_id)
+def create_appt(patient_id: int, appt: schemas.AppointmentCreate, db: Session = Depends(get_db)):
+    db_appointment = crud.create_patient_appointment(db=db, appointment=appt, patient_id=patient_id)
+    if db_appointment is None:
+        raise HTTPException(status_code=404, detail="Appointment time not valid!")
+    return db_appointment
+
 
 # To read all the appointments
 @app.get("/appointments", response_model= List[schemas.Appointment])
