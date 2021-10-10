@@ -1,0 +1,16 @@
+On the command line:
+
+## To create the tables for the first time
+#Navigate to src folder
+>>> py -m alembic init patient
+# In alembic.ini, update the sqlalchemy.url to include the port (5432).
+>>> py -m alembic revision -m "my first migration"
+# Make changes to the latest in patient/version to create tables
+# To create the table
+>>> cd .. && docker-compose down && docker-compose up -d --build
+>>> docker-compose run api alembic upgrade head
+>>>
+
+
+
+

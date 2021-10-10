@@ -4,6 +4,8 @@ from pydantic import BaseModel
 
 class AppointmentBase(BaseModel):
     appt_length: int
+
+    # Sorry for editing schemas but i couldnt think of a neat way around it! 
     # description: Optional[str] = None
     # bean_type: Optional[str] = None
     # brew_time: Optional[float] = 0.0

@@ -14,7 +14,8 @@ from app.api import test
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Uncomment the line below to let the ORM generate tables and relationships for us - if not using migrations
-models.Base.metadata.create_all(bind=engine)
+# Alembic is running correctly so the below stays commented out!
+# models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
