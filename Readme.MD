@@ -26,6 +26,7 @@ src/app/api/crud.py creates the worker functions that are used in the API to cre
 
 ## To get started
 Install [Docker](https://www.docker.com/)
+
 Navigate to the location of the folder 
 ```bash
 cd folder\location\api-python-assignment
