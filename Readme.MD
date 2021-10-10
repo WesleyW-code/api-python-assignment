@@ -21,8 +21,8 @@ The below will outline the backend for my appointment service, that allows vario
 - [ ] Update an appointment 
 
 ## Important locations
->>> src/app/main.py contains the code that runs the actual API, using FastAPI
->>> src/app/api/crud.py creates the worker functions that are used in the API to create, view, update and delete data entries
+src/app/main.py contains the code that runs the actual API, using FastAPI
+src/app/api/crud.py creates the worker functions that are used in the API to create, view, update and delete data entries
 
 ## To get started
 Install [Docker](https://www.docker.com/)
@@ -93,7 +93,7 @@ Input:
 Output:
 - Information of the specific patient that you requested
 
-### [To create an appointment](http://localhost:8080/appointment/):
+#### [To create an appointment](http://localhost:8080/appointment/):
 Input:
 - patient ID
 - lenght of appointment in minutes
@@ -124,7 +124,7 @@ eg:
 }
 ```
 
-### [To view all appointments](http://localhost:8080/patients/):
+#### [To view all appointments](http://localhost:8080/patients/):
 Input:
 - skip (default value 0)
 - limit (default value 100)
@@ -133,7 +133,7 @@ Output:
 - List of all appointments in the system
 
 
-### [To view all appointments for a specific patient](http://localhost:8080/patients/1/appointments):
+#### [To view all appointments for a specific patient](http://localhost:8080/patients/1/appointments):
 Input:
 - Patient ID (can be obtained from read all patients)
     Note: this can be accessed by putting their ID in {id} at http://localhost:8080/patient/{id}/appointments
